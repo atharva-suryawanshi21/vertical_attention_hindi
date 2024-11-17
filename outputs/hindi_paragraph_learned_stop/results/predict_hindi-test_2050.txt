@@ -1,0 +1,10 @@
+nb_samples: 4
+nb_chars: 108
+cer: 0.213
+nb_words: 23
+wer: 0.3043
+diff_len: [np.int64(0), np.int64(0), np.int64(0), np.int64(0)]
+diff_len-mean_abs: 0.0
+worst_cer: [[23, 1], [0, 2], [0, 3], [0, 4]]
+total_time: 8.556
+sample_time: 2.139

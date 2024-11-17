@@ -1,0 +1,176 @@
+{
+    "dataset_params": {
+        "datasets": {
+            "hindi": "/home/ironman/atharva/hindi_verti_attn_words/Datasets/formatted/hindi_paragraph"
+        },
+        "train": {
+            "name": "hindi-train",
+            "datasets": [
+                "hindi"
+            ]
+        },
+        "valid": {
+            "hindi-valid": [
+                "hindi"
+            ]
+        },
+        "dataset_class": "OCRDataset",
+        "config": {
+            "width_divisor": 8,
+            "height_divisor": 32,
+            "padding_value": 1,
+            "padding_token": 219,
+            "charset_mode": "CTC",
+            "constraints": [
+                "padding",
+                "CTC_va"
+            ],
+            "padding": {
+                "min_height": 480,
+                "min_width": 800
+            },
+            "preprocessings": [
+                {
+                    "type": "dpi",
+                    "source": 300,
+                    "target": 300
+                },
+                {
+                    "type": "to_RGB"
+                }
+            ],
+            "augmentation": {
+                "dpi": {
+                    "proba": 0.2,
+                    "min_factor": 0.75,
+                    "max_factor": 1
+                },
+                "perspective": {
+                    "proba": 0.2,
+                    "min_factor": 0,
+                    "max_factor": 0.3
+                },
+                "elastic_distortion": {
+                    "proba": 0.2,
+                    "max_magnitude": 20,
+                    "max_kernel": 3
+                },
+                "random_transform": {
+                    "proba": 0.2,
+                    "max_val": 125
+                },
+                "dilation_erosion": {
+                    "proba": 0.2,
+                    "min_kernel": 1,
+                    "max_kernel": 3,
+                    "iterations": 1
+                },
+                "brightness": {
+                    "proba": 0.2,
+                    "min_factor": 0.01,
+                    "max_factor": 1
+                },
+                "contrast": {
+                    "proba": 0.2,
+                    "min_factor": 0.01,
+                    "max_factor": 1
+                },
+                "sign_flipping": {
+                    "proba": 0.2
+                }
+            },
+            "mean": [
+                242.887059818279,
+                242.887059818279,
+                242.887059818279
+            ],
+            "std": [
+                50.26436328289235,
+                50.26436328289235,
+                50.26436328289235
+            ]
+        },
+        "use_apex": false,
+        "use_ddp": false,
+        "batch_size": 64,
+        "num_gpu": 1
+    },
+    "model_params": {
+        "models": {
+            "encoder": [
+                "FCN_Encoder",
+                "1,706,240"
+            ],
+            "attention": [
+                "VerticalAttention",
+                "465,768"
+            ],
+            "decoder": [
+                "LineDecoderCTC",
+                "582,619"
+            ]
+        },
+        "transfer_learning": null,
+        "input_channels": 3,
+        "dropout": 0.5,
+        "dec_dropout": 0.5,
+        "att_dropout": 0.2,
+        "features_size": 256,
+        "att_fc_size": 256,
+        "use_location": true,
+        "use_coverage_vector": true,
+        "coverage_mode": "clamp",
+        "emb_max_features_width": 250,
+        "emb_max_features_height": 100,
+        "use_hidden": true,
+        "hidden_size": 256,
+        "nb_layers_decoder": 1,
+        "min_height_feat": 15,
+        "min_width_feat": 100,
+        "stop_mode": "learned",
+        "vocab_size": 218,
+        "total_params": "2,754,627"
+    },
+    "training_params": {
+        "output_folder": "hindi_paragraph_learned_stop",
+        "max_nb_epochs": 3000,
+        "max_training_time": 1692000000,
+        "load_epoch": "best",
+        "interval_save_weights": 100,
+        "batch_size": 64,
+        "use_ddp": false,
+        "ddp_port": "10000",
+        "use_apex": false,
+        "nb_gpu": 1,
+        "optimizer": {
+            "class": "Adam",
+            "args": {
+                "lr": 0.0001,
+                "amsgrad": true
+            }
+        },
+        "eval_on_valid": true,
+        "eval_on_valid_interval": 10,
+        "focus_metric": "cer",
+        "expected_metric_value": "low",
+        "set_name_focus_metric": "hindi-valid",
+        "train_metrics": [
+            "loss_ctc",
+            "cer",
+            "wer",
+            "loss_ce"
+        ],
+        "eval_metrics": [
+            "cer",
+            "wer",
+            "diff_len"
+        ],
+        "force_cpu": false,
+        "max_pred_lines": 30,
+        "stop_mode": "learned",
+        "ddp_rank": 0
+    },
+    "hardware": {
+        "0": "NVIDIA RTX A6000 _CudaDeviceProperties(name='NVIDIA RTX A6000', major=8, minor=6, total_memory=48676MB, multi_processor_count=84)"
+    }
+}
